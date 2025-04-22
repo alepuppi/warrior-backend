@@ -1,0 +1,217 @@
+@font-face {
+    font-family: 'NewAthleticM54';
+    src: url('/fonts/NewAthleticM54.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Contenedor principal */
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    font-family: Arial, sans-serif;
+}
+
+/* Fondo amarillo */
+body {
+    background-color: #FFD700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Sección izquierda */
+.login-left {
+    flex: 1.5;
+    background-color: #FFD700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    color: black;
+    padding: 5%;
+}
+
+/* Títulos */
+.login-left h2 {
+    font-family: 'NewAthleticM54', sans-serif;
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 10px;
+    margin-bottom: -70px;
+    color: rgb(4, 4, 4);
+}
+
+.login-left h1 {
+    font-family: 'NewAthleticM54', sans-serif;
+    font-size: 8vw;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* Sección blanca */
+.login-right {
+    flex: 0.9;
+    background-color: #F8F8F8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+    border-top-left-radius: 5vw;
+    border-bottom-left-radius: 5vw;
+}
+
+/* Contenedor del formulario */
+.login-form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px; /* 🔹 Más espacio entre elementos */
+}
+
+/* Logo */
+.login-logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    object-fit: cover;
+}
+
+/* Inputs */
+.input-group input {
+    width: 300px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    background-color: #BDB76B;
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 15px; /* 🔹 Separar los campos */
+}
+
+/* Switch "Recordar usuario" */
+.remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    gap: 10px;
+    color: rgb(0, 0, 0);
+    margin-top: 5px; /* 🔹 Separar del input de contraseña */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: black;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Botón */
+.login-button {
+    width: 180px;
+    background-color: black;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    text-align: center;
+    font-family: 'NewAthleticM54', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px auto 0;
+}
+
+.login-button:hover {
+    background-color: gray;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-left, .login-right {
+        flex: none;
+        width: 100%;
+        border-radius: 0;
+        padding: 10%;
+    }
+
+    .login-left h1 {
+        font-size: 6vw;
+    }
+
+    .login-left h2 {
+        font-size: 4vw;
+    }
+
+    .login-form {
+        width: 80%;
+    }
+
+    .login-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .input-group input {
+        width: 200px;
+    }
+
+    .login-button {
+        width: 150px;
+    }
+}

@@ -1,0 +1,92 @@
+/* renovacionBuscarModal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group input {
+    padding: 10px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 8px;
+  }
+  
+  .form-group button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .form-group button:hover {
+    background-color: #125ca1;
+  }
+  
+  .cliente-info {
+    text-align: left;
+    margin-top: 20px;
+    background: #f7f7f7;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .alerta {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .mensaje {
+    color: #d32f2f;
+    margin-top: 10px;
+  }
+  
+  .modal-buttons {
+    margin-top: 20px;
+  }
+  
+  .modal-buttons .cancel {
+    padding: 10px 20px;
+    background-color: #777;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .modal-buttons .cancel:hover {
+    background-color: #555;
+  }
+  

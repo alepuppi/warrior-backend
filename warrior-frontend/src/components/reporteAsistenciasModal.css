@@ -1,0 +1,80 @@
+.reporte-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .reporte-modal {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .reporte-modal h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .reporte-modal select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    margin-bottom: 25px;
+    outline: none;
+  }
+  
+  .reporte-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .reporte-buttons button {
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .reporte-buttons button:first-child {
+    background-color: #d7d600;
+    color: black;
+  }
+  
+  .reporte-buttons button:first-child:hover {
+    background-color: #bdbb00;
+  }
+  
+  .reporte-buttons .cancel {
+    background-color: #ccc;
+    color: black;
+  }
+  
+  .reporte-buttons .cancel:hover {
+    background-color: #a3a3a3;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
