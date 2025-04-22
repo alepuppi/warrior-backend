@@ -6,7 +6,7 @@ import MembresiaModal from "../components/MembresiaModal";
 import RegistrarMensualModal from "../components/RegistrarMensualModal";
 import RegistrarDuoModal from "../components/RegistrarDuoModal";
 import RegistrarTrimestralModal from "../components/RegistrarTrimestralModal";
-import "./Principal.css";
+import "./principal.css";
 import logo from "../assets/logo.jpg";
 import AsistenciasActualModal from "../components/AsistenciasActualModal";
 import AsistenciasReporteModal from "../components/AsistenciasReporteModal";
