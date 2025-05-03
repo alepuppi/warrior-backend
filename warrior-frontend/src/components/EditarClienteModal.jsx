@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./clienteModal.css";
+import "./clientemodal.css";
 
 const EditarClienteModal = ({ cliente, cerrar }) => {
   const [nombre, setNombre] = useState("");
