@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./clienteModal.css"; // Reutiliza estilos
+import "./clientemodal.css"; // Reutiliza estilos
 
 const AsistenciasActualModal = ({ cerrar }) => {
   const [asistencias, setAsistencias] = useState([]);

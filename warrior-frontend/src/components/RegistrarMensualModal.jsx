@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './clienteModal.css';
+import './clientemodal.css';
 
 const RegistrarMensualModal = ({ cerrar }) => {
   const [formulario, setFormulario] = useState({

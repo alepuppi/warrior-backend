@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./membresiaModal.css";
+import './MembresiaModal.css';
 import RegistrarMensualModal from "./RegistrarMensualModal";
 import RegistrarDuoModal from "./RegistrarDuoModal";
 import RegistrarTrimestralModal from "./RegistrarTrimestralModal";

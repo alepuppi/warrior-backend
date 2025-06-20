@@ -1,5 +1,5 @@
 import React from 'react';
-import './clienteModal.css'; // Reutilizando tus estilos
+import './clientemodal.css'; // Reutilizando tus estilos
 
 const SeleccionarTipoMembresiaModal = ({ onClose, onSeleccionar }) => {
   const tipos = [

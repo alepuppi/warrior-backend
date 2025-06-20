@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./registrarMensualModal.css"; // Usa los mismos estilos
+import "./RegistrarMensualModal.css"; // Usa los mismos estilos
 
 const RegistrarTrimestralModal = ({ cerrar }) => {
   const [formulario, setFormulario] = useState({
