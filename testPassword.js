@@ -1,5 +1,4 @@
-const bcrypt = require('bcrypt');
-
+const bcrypt = require('bcryptjs');
 const passwordIngresada = 'aterdonob1712';
 const passwordEncriptada = '$2b$10$0aGgK4F9GJFXECzkAyoZf.7/QQaqVLEp1zWrWIaY1wwXuhoBr3/bC'; // Hash guardado en la BD
 
