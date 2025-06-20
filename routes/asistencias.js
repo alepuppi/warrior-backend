@@ -1,17 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql2");
 const { Parser } = require("json2csv");
+const pool = require("../db"); // ✅ Usa el pool configurado con variables de entorno
 
-// Ajusta estos datos con los de tu base
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "warrior_db"
-});
-
-router.get("/asistencias/reporte/:mes", (req, res) => {
+router.get("/asistencias/reporte/:mes", async (req, res) => {
   const mes = req.params.mes;
   const anio = new Date().getFullYear();
 
@@ -23,8 +15,8 @@ router.get("/asistencias/reporte/:mes", (req, res) => {
     ORDER BY a.fecha ASC
   `;
 
-  connection.query(query, [mes, anio], (err, results) => {
-    if (err) return res.status(500).send("Error al generar el reporte");
+  try {
+    const [results] = await pool.query(query, [mes, anio]);
 
     const fields = ["id", "dni", "nombre_completo", "fecha"];
     const json2csvParser = new Parser({ fields });
@@ -33,7 +25,10 @@ router.get("/asistencias/reporte/:mes", (req, res) => {
     res.header("Content-Type", "text/csv");
     res.attachment(`reporte_asistencias_mes_${mes}.csv`);
     return res.send(csv);
-  });
+  } catch (err) {
+    console.error("❌ Error al generar el reporte:", err);
+    return res.status(500).send("Error al generar el reporte");
+  }
 });
 
 module.exports = router;
