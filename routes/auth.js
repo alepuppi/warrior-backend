@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { pool } = require('../db'); // Importamos el pool de conexiones correctamente
+const db = require('../db'); // ✅ Usamos el pool directamente
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
 
     try {
         // Consultar usuario en la base de datos
-        const [results] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        const [results] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
 
         console.log('Resultados de la base de datos:', results);
 
