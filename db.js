@@ -1,6 +1,8 @@
 // db.js
 const mysql = require('mysql2');
+if (process.env.NODE_ENV !== "production") {
 require('dotenv').config();
+}
 
 console.log("🔍 DB_USER desde db.js:", process.env.DB_USER);
 console.log("🌐 DB_HOST:", process.env.DB_HOST);

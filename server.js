@@ -1,4 +1,7 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+  }
+  
 console.log("▶️ ENV USER:", process.env.DB_USER); // Agrega esto
 const express = require('express');
 const cors = require('cors');
