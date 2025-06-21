@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../db');
+const { pool, registrarAuditoria } = require('../db');
+const moment = require('moment');
 
 // 📌 Ruta para registrar membresía mensual
 router.post('/mensual', async (req, res) => {
@@ -11,12 +12,17 @@ router.post('/mensual', async (req, res) => {
   }
 
   try {
+    const fecha_fin = moment(fecha_inicio).add(1, 'months').format('YYYY-MM-DD');
+
     const sql = `
-      INSERT INTO membresias (nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta, tipo_membresia)
-      VALUES (?, ?, ?, ?, ?, 'Mensual')
+      INSERT INTO membresias (
+        nombre_completo_1, dni_1, fecha_inicio, fecha_fin, metodo_pago, numero_boleta, tipo_membresia
+      ) VALUES (?, ?, ?, ?, ?, ?, 'Mensual')
     `;
-    const valores = [nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta];
+    const valores = [nombre_completo, dni, fecha_inicio, fecha_fin, metodo_pago, numero_boleta];
     const [result] = await pool.query(sql, valores);
+
+    await registrarAuditoria('warrior', 'Registro', `Registró membresía Mensual (${dni})`);
 
     return res.status(200).json({ message: 'Membresía mensual registrada', id: result.insertId });
   } catch (error) {
@@ -25,7 +31,7 @@ router.post('/mensual', async (req, res) => {
   }
 });
 
-// ✅ RUTA PARA DUO
+// 📌 Ruta para registrar membresía Duo
 router.post('/duo', async (req, res) => {
   const {
     nombre1, dni1,
@@ -40,15 +46,30 @@ router.post('/duo', async (req, res) => {
   }
 
   try {
-    const nombresJuntos = `${nombre1} / ${nombre2}`;
-    const dnisJuntos = `${dni1} / ${dni2}`;
+    let fechaFin;
+    if (dni1 === dni2) {
+      fechaFin = moment(fechaInicio).add(2, 'months').format('YYYY-MM-DD');
+    } else {
+      fechaFin = moment(fechaInicio).add(1, 'months').format('YYYY-MM-DD');
+    }
+
     const sql = `
       INSERT INTO membresias (
-        nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta, tipo_membresia
-      ) VALUES (?, ?, ?, ?, ?, 'Duo')
+        nombre_completo_1, dni_1,
+        nombre_completo_2, dni_2,
+        fecha_inicio, fecha_fin,
+        metodo_pago, numero_boleta, tipo_membresia
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Duo')
     `;
-    const valores = [nombresJuntos, dnisJuntos, fechaInicio, metodoPago, numeroBoleta];
+    const valores = [
+      nombre1, dni1,
+      nombre2, dni2,
+      fechaInicio, fechaFin,
+      metodoPago, numeroBoleta
+    ];
     const [result] = await pool.query(sql, valores);
+
+    await registrarAuditoria('warrior', 'Registro', `Registró membresía Duo (${dni1} y ${dni2})`);
 
     return res.status(200).json({ message: 'Membresía Duo registrada', id: result.insertId });
   } catch (error) {
@@ -59,29 +80,32 @@ router.post('/duo', async (req, res) => {
 
 // 📌 Ruta para registrar membresía Trimestral
 router.post('/trimestral', async (req, res) => {
-  console.log("📥 Datos recibidos en /trimestral:", req.body);
   const {
     nombre,
     dni,
     fechaInicio,
-    fechaFin,
     metodoPago,
     numeroBoleta
   } = req.body;
 
-  if (!nombre || !dni || !fechaInicio || !fechaFin || !metodoPago || !numeroBoleta) {
+  if (!nombre || !dni || !fechaInicio || !metodoPago || !numeroBoleta) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
   try {
+    const fechaFin = moment(fechaInicio).add(3, 'months').format('YYYY-MM-DD');
+
     const sql = `
       INSERT INTO membresias (
-        nombre_completo, dni, fecha_inicio,
-        fecha_fin, metodo_pago, numero_boleta, tipo_membresia
+        nombre_completo_1, dni_1,
+        fecha_inicio, fecha_fin,
+        metodo_pago, numero_boleta, tipo_membresia
       ) VALUES (?, ?, ?, ?, ?, ?, 'Trimestral')
     `;
     const valores = [nombre, dni, fechaInicio, fechaFin, metodoPago, numeroBoleta];
     const [result] = await pool.query(sql, valores);
+
+    await registrarAuditoria('warrior', 'Registro', `Registró membresía Trimestral (${dni})`);
 
     return res.status(200).json({ message: 'Membresía Trimestral registrada', id: result.insertId });
   } catch (error) {
