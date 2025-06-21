@@ -15,7 +15,7 @@ const RegistrarTrimestralModal = ({ cerrar }) => {
   const buscarNombrePorDNI = async (dni) => {
     if (dni.length >= 8) {
       try {
-        const res = await fetch(`http://localhost:3006/api/clientes/buscar/${dni}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clientes/buscar/${dni}`);
         const data = await res.json();
 
         if (data && data.nombre_completo) {
@@ -63,7 +63,7 @@ const RegistrarTrimestralModal = ({ cerrar }) => {
     console.log("Formulario enviado:", formulario);
 
     try {
-      const respuesta = await fetch("http://localhost:3006/api/membresias/trimestral", {
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/membresias/trimestral`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formulario),

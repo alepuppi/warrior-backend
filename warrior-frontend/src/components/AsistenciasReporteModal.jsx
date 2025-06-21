@@ -9,7 +9,7 @@ const AsistenciasReporteModal = ({ cerrar }) => {
     if (!mes) return alert("Selecciona un mes primero");
 
     try {
-      const response = await fetch(`http://localhost:3006/api/asistencias/reporte/${mes}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/asistencias/reporte/${mes}`);
       if (!response.ok) throw new Error("Error al descargar el reporte");
 
       const blob = await response.blob();

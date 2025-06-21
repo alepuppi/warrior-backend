@@ -28,7 +28,7 @@ const EditarClienteModal = ({ cliente, cerrar }) => {
       console.log("Enviando datos:", clienteActualizado);
 
       const response = await fetch(
-        `http://localhost:3006/api/clientes/editar/${cliente.id}`, // ✅ Ruta corregida
+        `${import.meta.env.VITE_API_URL}/api/clientes/editar/${cliente.id}`,      
         {
           method: "PUT",
           headers: {

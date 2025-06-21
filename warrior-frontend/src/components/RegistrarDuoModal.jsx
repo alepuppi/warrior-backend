@@ -15,7 +15,7 @@ const RegistrarDuoModal = ({ cerrar }) => {
   const buscarNombrePorDNI = async (dni, persona) => {
     if (dni.length >= 8) {
       try {
-        const res = await fetch(`http://localhost:3006/api/clientes/buscar/${dni}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/clientes/buscar/${dni}`);
         const data = await res.json();
 
         if (data && data.nombre_completo) {
@@ -62,8 +62,8 @@ const RegistrarDuoModal = ({ cerrar }) => {
       
 
     try {
-        const respuesta = await fetch("http://localhost:3006/api/membresias/duo", {
-            method: "POST",
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/membresias/duo`, {
+        method: "POST",
             headers: {
               "Content-Type": "application/json",
             },

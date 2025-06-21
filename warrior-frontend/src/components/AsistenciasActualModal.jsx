@@ -7,7 +7,7 @@ const AsistenciasActualModal = ({ cerrar }) => {
   useEffect(() => {
     const obtenerAsistencias = async () => {
       try {
-        const response = await fetch("http://localhost:3006/asistencias/hoy");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/asistencias/hoy`);
         const data = await response.json();
         setAsistencias(data);
       } catch (error) {

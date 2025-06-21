@@ -11,7 +11,7 @@ const RenovacionBuscarModal = ({ cerrar }) => {
     if (!dni) return;
 
     try {
-      const response = await fetch(`http://localhost:3006/api/renovacion/${dni}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/renovacion/${dni}`);
       const data = await response.json();
 
       if (response.ok) {

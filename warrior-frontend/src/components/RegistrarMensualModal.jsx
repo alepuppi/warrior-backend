@@ -20,8 +20,8 @@ const RegistrarMensualModal = ({ cerrar }) => {
 
     // Si se está escribiendo el DNI, intentar buscar el nombre
     if (name === 'dni' && value.length >= 8) {
-      fetch(`http://localhost:3006/api/clientes/buscar/${value}`)
-        .then((res) => res.json())
+      fetch(`${import.meta.env.VITE_API_URL}/api/clientes/buscar/${value}`)
+      .then((res) => res.json())
         .then((data) => {
           if (data && data.nombre_completo) {
             setFormulario((prev) => ({ ...prev, nombre: data.nombre_completo }));
@@ -48,7 +48,7 @@ const RegistrarMensualModal = ({ cerrar }) => {
     };
 
     try {
-      const respuesta = await fetch('http://localhost:3006/api/membresias/mensual', {
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/membresias/mensual`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosParaEnviar),

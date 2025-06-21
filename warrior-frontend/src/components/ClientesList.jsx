@@ -11,7 +11,7 @@ const ClientesList = ({ cerrar, onEditarCliente }) => {
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const response = await fetch("http://localhost:3006/api/clientes/listado");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/clientes/listado`);
         if (!response.ok) throw new Error("Error al obtener clientes");
         const data = await response.json();
         setClientes(data);
