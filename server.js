@@ -13,8 +13,11 @@ if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 3006;
   
   // Middleware
-  app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-  app.use(bodyParser.json());
+  app.use(cors({
+    origin: ["http://localhost:5173", "https://warrior-frontend.vercel.app"],
+    credentials: true,
+  }));
+    app.use(bodyParser.json());
   app.use(express.json());
   
   // Importar rutas
