@@ -1,4 +1,3 @@
-// db.js
 const mysql = require('mysql2/promise');
 
 if (process.env.NODE_ENV !== "production") {
@@ -24,17 +23,19 @@ const pool = mysql.createPool({
 });
 
 // Función para registrar auditoría
-const registrarAuditoria = async (userId, accion, fecha) => {
+const registrarAuditoria = async (userId, accion, descripcion) => {
   try {
     await pool.query(
-      'INSERT INTO logs_auditoria (user_id, accion, fecha) VALUES (?, ?, ?)',
-      [userId, accion, fecha]
+      'INSERT INTO logs_auditoria (user_id, accion, descripcion, fecha) VALUES (?, ?, ?, NOW())',
+      [userId, accion, descripcion]
     );
   } catch (error) {
     console.error('❌ Error al registrar auditoría:', error);
   }
 };
 
-pool.registrarAuditoria = registrarAuditoria;
-
-module.exports = pool;
+// Exportar como objeto (CORRECTO)
+module.exports = {
+  pool,
+  registrarAuditoria
+};
