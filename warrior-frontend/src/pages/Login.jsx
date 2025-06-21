@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.jpg";// Solo forzando rebuild en Vercel lol
 
 const Login = () => {
   const [username, setUsername] = useState(""); // Cambio de "usuario" a "username"

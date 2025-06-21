@@ -26,7 +26,7 @@ const ClienteModal = ({ setMostrarModal }) => {
     };
 
     try {
-      const response = await axios.post("http://localhost:3006/api/clientes/registrar", datos);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/clientes/registrar`, datos);
       console.log("✅ Cliente registrado:", response.data);
       setMostrarModal(false); // cerrar modal
     } catch (error) {

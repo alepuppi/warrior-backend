@@ -14,9 +14,10 @@ if (process.env.NODE_ENV !== "production") {
   
   // Middleware
   app.use(cors({
-    origin: ["http://localhost:5173", "https://warrior-frontend.vercel.app"],
-    credentials: true,
-  }));
+    origin: "*", // 🔓 Para desarrollo y pruebas; más adelante se puede restringir
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  }));  
     app.use(bodyParser.json());
   app.use(express.json());
   
@@ -32,7 +33,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use("/api", asistenciasRoutes);
   app.use("/api", renovacionesRoutes);
   app.use('/api/users', userRoutes);
-  app.use('/api/clientes', clientesRoutes);
+  app.use('/api/clientes7registrar', clientesRoutes);
   app.use('/api', authRoutes);
   app.use('/api/membresias', membresiasRouter);
   
