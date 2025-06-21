@@ -33,7 +33,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use("/api", asistenciasRoutes);
   app.use("/api", renovacionesRoutes);
   app.use('/api/users', userRoutes);
-  app.use('/api/clientes7registrar', clientesRoutes);
+  app.use('/api/clientes', clientesRoutes);
   app.use('/api', authRoutes);
   app.use('/api/membresias', membresiasRouter);
   
