@@ -3,17 +3,12 @@ const router = express.Router();
 const { pool, registrarAuditoria } = require('../db'); // Importamos el pool Y la auditoría
 const db = require('../db');
 
-// Middleware para verificar la conexión a la base de datos
-router.use(async (req, res, next) => {
-    try {
-        await pool.getConnection();
-        console.log("✅ Conexión a la base de datos establecida.");
-        next();
-    } catch (error) {
-        console.error("❌ Error en la conexión a la base de datos:", error);
-        return res.status(500).json({ error: "Error en la conexión a la base de datos." });
-    }
-});
+// Middleware para registrar que se recibió la solicitud (opcional)
+router.use((req, res, next) => {
+    console.log(`📥 Solicitud recibida en ${req.method} ${req.originalUrl}`);
+    next();
+  });
+  
 
 // ✅ Endpoint para obtener todos los clientes
 router.get('/listado', async (req, res) => {
