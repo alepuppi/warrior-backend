@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const db = require('../db'); // ✅ Usamos el pool directamente
+const { pool } = require('../db'); // ✅ Usamos pool del nuevo db.js
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
 
     try {
         // Consultar usuario en la base de datos
-        const [results] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
+        const [results] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
 
         console.log('Resultados de la base de datos:', results);
 
@@ -35,7 +35,11 @@ router.post('/login', async (req, res) => {
         }
 
         // Generar token JWT
-        const token = jwt.sign({ id: user.id, username: user.username }, 'Rafaella2002', { expiresIn: '1h' });
+        const token = jwt.sign(
+            { id: user.id, username: user.username },
+            'Rafaella2002', // 🔐 Te recomiendo mover esto a una variable de entorno luego
+            { expiresIn: '1h' }
+        );
 
         res.json({ token });
 
