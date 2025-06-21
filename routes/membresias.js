@@ -12,7 +12,7 @@ router.post('/mensual', async (req, res) => {
 
   try {
     const sql = `
-      INSERT INTO membresias (nombreCompleto, dni, fechaInicio, metodoPago, numeroBoleta, tipoMembresia)
+      INSERT INTO membresias (nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta, tipo_membresia)
       VALUES (?, ?, ?, ?, ?, 'Mensual')
     `;
     const valores = [nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta];
@@ -44,7 +44,7 @@ router.post('/duo', async (req, res) => {
     const dnisJuntos = `${dni1} / ${dni2}`;
     const sql = `
       INSERT INTO membresias (
-        nombreCompleto, dni, fechaInicio, metodoPago, numeroBoleta, tipoMembresia
+        nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta, tipo_membresia
       ) VALUES (?, ?, ?, ?, ?, 'Duo')
     `;
     const valores = [nombresJuntos, dnisJuntos, fechaInicio, metodoPago, numeroBoleta];
@@ -59,7 +59,7 @@ router.post('/duo', async (req, res) => {
 
 // 📌 Ruta para registrar membresía Trimestral
 router.post('/trimestral', async (req, res) => {
-    console.log("📥 Datos recibidos en /trimestral:", req.body)
+  console.log("📥 Datos recibidos en /trimestral:", req.body);
   const {
     nombre,
     dni,
@@ -76,8 +76,8 @@ router.post('/trimestral', async (req, res) => {
   try {
     const sql = `
       INSERT INTO membresias (
-        nombreCompleto, dni, fechaInicio,
-        fechaFin, metodoPago, numeroBoleta, tipoMembresia
+        nombre_completo, dni, fecha_inicio,
+        fecha_fin, metodo_pago, numero_boleta, tipo_membresia
       ) VALUES (?, ?, ?, ?, ?, ?, 'Trimestral')
     `;
     const valores = [nombre, dni, fechaInicio, fechaFin, metodoPago, numeroBoleta];
