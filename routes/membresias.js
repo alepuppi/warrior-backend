@@ -114,4 +114,30 @@ router.post('/trimestral', async (req, res) => {
   }
 });
 
+// 📌 Ruta para listar membresías
+router.get('/listado', async (req, res) => {
+  try {
+    const [filas] = await pool.query(`
+      SELECT
+        id,
+        nombre_completo_1,
+        dni_1,
+        nombre_completo_2,
+        dni_2,
+        fecha_inicio,
+        fecha_fin,
+        metodo_pago,
+        numero_boleta,
+        tipo_membresia
+      FROM membresias
+      ORDER BY fecha_inicio DESC
+    `);
+
+    return res.status(200).json(filas);
+  } catch (error) {
+    console.error("❌ Error al obtener listado de membresías:", error);
+    return res.status(500).json({ error: 'Error al obtener listado de membresías' });
+  }
+});
+
 module.exports = router;

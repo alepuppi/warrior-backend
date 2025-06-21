@@ -6,6 +6,7 @@ import MembresiaModal from "../components/MembresiaModal";
 import RegistrarMensualModal from "../components/RegistrarMensualModal";
 import RegistrarDuoModal from "../components/RegistrarDuoModal";
 import RegistrarTrimestralModal from "../components/RegistrarTrimestralModal";
+import MembresiasList from "../components/MembresiasList";
 import "./principal.css";
 import logo from "../assets/logo.jpg";
 import AsistenciasActualModal from "../components/AsistenciasActualModal";
@@ -20,6 +21,7 @@ const Principal = () => {
   const [mostrarMensual, setMostrarMensual] = useState(false);
   const [mostrarDuo, setMostrarDuo] = useState(false);
   const [mostrarTrimestral, setMostrarTrimestral] = useState(false);
+  const [mostrarListadoMembresias, setMostrarListadoMembresias] = useState(false);
   const [mostrarAsistenciasActual, setMostrarAsistenciasActual] = useState(false);
   const [mostrarAsistenciasReporte, setMostrarAsistenciasReporte] = useState(false);
 
@@ -31,6 +33,7 @@ const Principal = () => {
     setMostrarMensual(false);
     setMostrarDuo(false);
     setMostrarTrimestral(false);
+    setMostrarListadoMembresias(false);
     setMostrarAsistenciasActual(false);
     setMostrarAsistenciasReporte(false);
   };
@@ -50,6 +53,11 @@ const Principal = () => {
     setMostrarModalMembresia(true);
   };
 
+  const abrirListadoMembresias = () => {
+    cerrarModales();
+    setMostrarListadoMembresias(true);
+  };
+
   const editarCliente = (cliente) => {
     cerrarModales();
     setTimeout(() => setClienteEditar(cliente), 0);
@@ -59,12 +67,12 @@ const Principal = () => {
     cerrarModales();
     setMostrarAsistenciasActual(true);
   };
-  
+
   const abrirAsistenciasReporte = () => {
     cerrarModales();
     setMostrarAsistenciasReporte(true);
   };
-  
+
   return (
     <div className="principal-container">
       {/* NAVBAR */}
@@ -81,6 +89,7 @@ const Principal = () => {
             Membresías
             <ul className="submenu">
               <li onClick={abrirModalMembresia}>Registrar</li>
+              <li onClick={abrirListadoMembresias}>Listado</li>
             </ul>
           </li>
           <li className="nav-item">
@@ -146,6 +155,10 @@ const Principal = () => {
 
       {mostrarTrimestral && (
         <RegistrarTrimestralModal cerrar={cerrarModales} />
+      )}
+
+      {mostrarListadoMembresias && (
+        <MembresiasList cerrar={cerrarModales} />
       )}
 
       {mostrarAsistenciasActual && (
