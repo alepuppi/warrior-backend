@@ -30,12 +30,12 @@ if (process.env.NODE_ENV !== "production") {
   const authRoutes = require('./routes/auth');
   
   // Usar rutas
+  app.use('/api/membresias', membresiasRouter);
   app.use("/api", asistenciasRoutes);
   app.use("/api", renovacionesRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/clientes', clientesRoutes);
   app.use('/api', authRoutes);
-  app.use('/api/membresias', membresiasRouter);
   
   // Ruta de prueba
   app.get('/', (req, res) => {

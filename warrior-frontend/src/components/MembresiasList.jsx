@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./MembresiaModal.css"
+import "./MembresiaModal.css";
 
 const MembresiasList = ({ cerrar }) => {
   const [membresias, setMembresias] = useState([]);
@@ -11,7 +11,7 @@ const MembresiasList = ({ cerrar }) => {
 
   const obtenerMembresias = async () => {
     try {
-     const response = await axios.get("https://thewarriorhouse.onrender.com/api/membresias/listado");
+      const response = await axios.get("https://thewarriorhouse.onrender.com/api/membresias/listado");
       setMembresias(response.data);
     } catch (error) {
       console.error("Error al obtener membresías:", error);
@@ -39,8 +39,8 @@ const MembresiasList = ({ cerrar }) => {
             <tbody>
               {membresias.map((m) => (
                 <tr key={m.id}>
-                  <td>{m.nombre_completo}</td>
-                  <td>{m.dni}</td>
+                  <td>{m.nombre_completo_1}</td>
+                  <td>{m.dni_1}</td>
                   <td>{m.fecha_inicio?.split("T")[0]}</td>
                   <td>{m.fecha_fin?.split("T")[0]}</td>
                   <td>{m.tipo_membresia}</td>
