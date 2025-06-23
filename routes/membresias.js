@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { pool, registrarAuditoria } = require('../db');
 const moment = require('moment');
+const PDFDocument = require('pdfkit');
+const ExcelJS = require('exceljs');
 
 // 📌 Ruta para registrar membresía mensual
 router.post('/mensual', async (req, res) => {
@@ -13,7 +15,6 @@ router.post('/mensual', async (req, res) => {
 
   try {
     const fecha_fin = moment(fecha_inicio).add(1, 'months').format('YYYY-MM-DD');
-
     const sql = `
       INSERT INTO membresias (
         nombre_completo_1, dni_1, fecha_inicio, fecha_fin, metodo_pago, numero_boleta, tipo_membresia
@@ -46,12 +47,9 @@ router.post('/duo', async (req, res) => {
   }
 
   try {
-    let fechaFin;
-    if (dni1 === dni2) {
-      fechaFin = moment(fechaInicio).add(2, 'months').format('YYYY-MM-DD');
-    } else {
-      fechaFin = moment(fechaInicio).add(1, 'months').format('YYYY-MM-DD');
-    }
+    const fechaFin = (dni1 === dni2)
+      ? moment(fechaInicio).add(2, 'months').format('YYYY-MM-DD')
+      : moment(fechaInicio).add(1, 'months').format('YYYY-MM-DD');
 
     const sql = `
       INSERT INTO membresias (
@@ -140,8 +138,7 @@ router.get('/listado', async (req, res) => {
   }
 });
 
-const PDFDocument = require('pdfkit');
-
+// 📌 Ruta para descargar PDF
 router.get('/descargar-pdf', async (req, res) => {
   try {
     const [filas] = await pool.query("SELECT * FROM membresias ORDER BY fecha_inicio DESC");
@@ -154,9 +151,12 @@ router.get('/descargar-pdf', async (req, res) => {
     doc.fontSize(18).text('Listado de Membresías', { align: 'center' }).moveDown();
 
     filas.forEach((m, index) => {
+      const fechaInicio = new Date(m.fecha_inicio).toISOString().split("T")[0];
+      const fechaFin = m.fecha_fin ? new Date(m.fecha_fin).toISOString().split("T")[0] : "—";
+
       doc
         .fontSize(12)
-        .text(`${index + 1}. ${m.nombre_completo_1} (${m.dni_1}) - ${m.tipo_membresia} - ${m.fecha_inicio.split("T")[0]} → ${m.fecha_fin?.split("T")[0]}`)
+        .text(`${index + 1}. ${m.nombre_completo_1} (${m.dni_1}) - ${m.tipo_membresia} - ${fechaInicio} → ${fechaFin}`)
         .moveDown(0.5);
     });
 
@@ -167,8 +167,7 @@ router.get('/descargar-pdf', async (req, res) => {
   }
 });
 
-const ExcelJS = require('exceljs');
-
+// 📌 Ruta para descargar Excel
 router.get('/descargar-excel', async (req, res) => {
   try {
     const [filas] = await pool.query("SELECT * FROM membresias ORDER BY fecha_inicio DESC");
