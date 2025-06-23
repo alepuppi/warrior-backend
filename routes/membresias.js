@@ -139,6 +139,7 @@ router.get('/listado', async (req, res) => {
 });
 
 // 📌 Ruta para descargar PDF
+// 📌 Ruta para descargar PDF
 router.get('/descargar-pdf', async (req, res) => {
   try {
     const [filas] = await pool.query("SELECT * FROM membresias ORDER BY fecha_inicio DESC");
@@ -154,9 +155,12 @@ router.get('/descargar-pdf', async (req, res) => {
       const fechaInicio = new Date(m.fecha_inicio).toISOString().split("T")[0];
       const fechaFin = m.fecha_fin ? new Date(m.fecha_fin).toISOString().split("T")[0] : "—";
 
+      const persona1 = `${m.nombre_completo_1} (${m.dni_1})`;
+      const persona2 = m.nombre_completo_2 ? ` y ${m.nombre_completo_2} (${m.dni_2})` : "";
+
       doc
         .fontSize(12)
-        .text(`${index + 1}. ${m.nombre_completo_1} (${m.dni_1}) - ${m.tipo_membresia} - ${fechaInicio} → ${fechaFin}`)
+        .text(`${index + 1}. ${persona1}${persona2} - ${m.tipo_membresia} - ${fechaInicio} → ${fechaFin}`)
         .moveDown(0.5);
     });
 
