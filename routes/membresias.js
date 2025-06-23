@@ -131,14 +131,39 @@ router.get('/listado', async (req, res) => {
       ORDER BY fecha_inicio DESC
     `);
 
-    return res.status(200).json(filas);
+    const procesado = filas.flatMap((m) => {
+      const fila1 = {
+        nombre_completo: m.nombre_completo_1,
+        dni: m.dni_1,
+        fecha_inicio: m.fecha_inicio,
+        fecha_fin: m.fecha_fin,
+        tipo_membresia: m.tipo_membresia,
+        numero_boleta: m.numero_boleta,
+        metodo_pago: m.metodo_pago,
+      };
+
+      const fila2 = (m.dni_2 && m.dni_1 !== m.dni_2)
+        ? {
+            nombre_completo: m.nombre_completo_2,
+            dni: m.dni_2,
+            fecha_inicio: m.fecha_inicio,
+            fecha_fin: m.fecha_fin,
+            tipo_membresia: m.tipo_membresia,
+            numero_boleta: m.numero_boleta,
+            metodo_pago: m.metodo_pago,
+          }
+        : null;
+
+      return fila2 ? [fila1, fila2] : [fila1];
+    });
+
+    return res.status(200).json(procesado);
   } catch (error) {
     console.error("❌ Error al obtener listado de membresías:", error);
     return res.status(500).json({ error: 'Error al obtener listado de membresías' });
   }
 });
 
-// 📌 Ruta para descargar PDF
 // 📌 Ruta para descargar PDF
 router.get('/descargar-pdf', async (req, res) => {
   try {
@@ -156,7 +181,9 @@ router.get('/descargar-pdf', async (req, res) => {
       const fechaFin = m.fecha_fin ? new Date(m.fecha_fin).toISOString().split("T")[0] : "—";
 
       const persona1 = `${m.nombre_completo_1} (${m.dni_1})`;
-      const persona2 = m.nombre_completo_2 ? ` y ${m.nombre_completo_2} (${m.dni_2})` : "";
+      const persona2 = m.dni_2 && m.dni_1 !== m.dni_2
+        ? ` y ${m.nombre_completo_2} (${m.dni_2})`
+        : "";
 
       doc
         .fontSize(12)
@@ -180,10 +207,8 @@ router.get('/descargar-excel', async (req, res) => {
     const worksheet = workbook.addWorksheet("Membresías");
 
     worksheet.columns = [
-      { header: "Nombre 1", key: "nombre_completo_1" },
-      { header: "DNI 1", key: "dni_1" },
-      { header: "Nombre 2", key: "nombre_completo_2" },
-      { header: "DNI 2", key: "dni_2" },
+      { header: "Nombre", key: "nombre_completo" },
+      { header: "DNI", key: "dni" },
       { header: "Inicio", key: "fecha_inicio" },
       { header: "Fin", key: "fecha_fin" },
       { header: "Tipo", key: "tipo_membresia" },
@@ -192,7 +217,27 @@ router.get('/descargar-excel', async (req, res) => {
     ];
 
     filas.forEach((m) => {
-      worksheet.addRow(m);
+      worksheet.addRow({
+        nombre_completo: m.nombre_completo_1,
+        dni: m.dni_1,
+        fecha_inicio: m.fecha_inicio,
+        fecha_fin: m.fecha_fin,
+        tipo_membresia: m.tipo_membresia,
+        numero_boleta: m.numero_boleta,
+        metodo_pago: m.metodo_pago,
+      });
+
+      if (m.dni_2 && m.dni_1 !== m.dni_2) {
+        worksheet.addRow({
+          nombre_completo: m.nombre_completo_2,
+          dni: m.dni_2,
+          fecha_inicio: m.fecha_inicio,
+          fecha_fin: m.fecha_fin,
+          tipo_membresia: m.tipo_membresia,
+          numero_boleta: m.numero_boleta,
+          metodo_pago: m.metodo_pago,
+        });
+      }
     });
 
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
