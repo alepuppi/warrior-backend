@@ -131,33 +131,19 @@ router.get('/listado', async (req, res) => {
       ORDER BY fecha_inicio DESC
     `);
 
-    const procesado = filas.flatMap((m) => {
-      const fila1 = {
-        nombre_completo: m.nombre_completo_1,
-        dni: m.dni_1,
-        fecha_inicio: m.fecha_inicio,
-        fecha_fin: m.fecha_fin,
-        tipo_membresia: m.tipo_membresia,
-        numero_boleta: m.numero_boleta,
-        metodo_pago: m.metodo_pago,
+    // ✅ Aquí construimos los nombres correctamente según si son distintos o iguales
+    const resultados = filas.map((m) => {
+      const nombre = m.dni_1 === m.dni_2 || !m.dni_2
+        ? m.nombre_completo_1
+        : `${m.nombre_completo_1} y ${m.nombre_completo_2}`;
+
+      return {
+        ...m,
+        nombre_completo: nombre
       };
-
-      const fila2 = (m.dni_2 && m.dni_1 !== m.dni_2)
-        ? {
-            nombre_completo: m.nombre_completo_2,
-            dni: m.dni_2,
-            fecha_inicio: m.fecha_inicio,
-            fecha_fin: m.fecha_fin,
-            tipo_membresia: m.tipo_membresia,
-            numero_boleta: m.numero_boleta,
-            metodo_pago: m.metodo_pago,
-          }
-        : null;
-
-      return fila2 ? [fila1, fila2] : [fila1];
     });
 
-    return res.status(200).json(procesado);
+    return res.status(200).json(resultados);
   } catch (error) {
     console.error("❌ Error al obtener listado de membresías:", error);
     return res.status(500).json({ error: 'Error al obtener listado de membresías' });
