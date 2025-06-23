@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ClienteModal from "../components/ClienteModal";
+import ClienteModal from "../components/ClienteModal"; /*lol*/
 import ClientesList from "../components/ClientesList";
 import EditarClienteModal from "../components/EditarClienteModal";
 import MembresiaModal from "../components/MembresiaModal";
@@ -86,7 +86,7 @@ const Principal = () => {
             </ul>
           </li>
           <li className="nav-item">
-            Membresías
+            Membresías 
             <ul className="submenu">
               <li onClick={abrirModalMembresia}>Registrar</li>
               <li onClick={abrirListadoMembresias}>Listado</li>
@@ -172,4 +172,4 @@ const Principal = () => {
   );
 };
 
-export default Principal;
+export default Principal; 

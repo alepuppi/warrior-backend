@@ -58,6 +58,7 @@ body, html {
 /* Submenús */
 .submenu {
   display: none;
+  flex-direction: column; /* nuevo: asegura que cada opción esté en línea separada */
   position: absolute;
   top: 100%;
   left: 0;
@@ -67,10 +68,11 @@ body, html {
   white-space: nowrap;
   list-style: none;
   z-index: 1000;
+  min-width: 120px; /* nuevo: asegura que tenga ancho suficiente */
 }
 
 .nav-item:hover .submenu {
-  display: block;
+  display: flex; /* corregido de 'block' a 'flex' para respetar el orden vertical */
 }
 
 .submenu li {
@@ -97,3 +99,4 @@ body, html {
   height: auto;
   max-width: 90%;
 }
+/*text*/

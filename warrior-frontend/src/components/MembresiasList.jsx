@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./Modal.css";
+import "./MembresiaModal.css"
 
 const MembresiasList = ({ cerrar }) => {
   const [membresias, setMembresias] = useState([]);
