@@ -11,7 +11,7 @@ const MembresiasList = ({ cerrar }) => {
 
   const obtenerMembresias = async () => {
     try {
-      const response = await axios.get("https://thewarriorhouse.onrender.com/api/membresias");
+     const response = await axios.get("https://thewarriorhouse.onrender.com/api/membresias/listado");
       setMembresias(response.data);
     } catch (error) {
       console.error("Error al obtener membresías:", error);
