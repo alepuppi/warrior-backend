@@ -140,4 +140,67 @@ router.get('/listado', async (req, res) => {
   }
 });
 
+const PDFDocument = require('pdfkit');
+
+router.get('/descargar-pdf', async (req, res) => {
+  try {
+    const [filas] = await pool.query("SELECT * FROM membresias ORDER BY fecha_inicio DESC");
+
+    const doc = new PDFDocument();
+    res.setHeader('Content-Disposition', 'attachment; filename="membresias.pdf"');
+    res.setHeader('Content-Type', 'application/pdf');
+    doc.pipe(res);
+
+    doc.fontSize(18).text('Listado de Membresías', { align: 'center' }).moveDown();
+
+    filas.forEach((m, index) => {
+      doc
+        .fontSize(12)
+        .text(`${index + 1}. ${m.nombre_completo_1} (${m.dni_1}) - ${m.tipo_membresia} - ${m.fecha_inicio.split("T")[0]} → ${m.fecha_fin?.split("T")[0]}`)
+        .moveDown(0.5);
+    });
+
+    doc.end();
+  } catch (err) {
+    console.error("❌ Error al generar PDF:", err);
+    res.status(500).send("Error al generar PDF");
+  }
+});
+
+const ExcelJS = require('exceljs');
+
+router.get('/descargar-excel', async (req, res) => {
+  try {
+    const [filas] = await pool.query("SELECT * FROM membresias ORDER BY fecha_inicio DESC");
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Membresías");
+
+    worksheet.columns = [
+      { header: "Nombre 1", key: "nombre_completo_1" },
+      { header: "DNI 1", key: "dni_1" },
+      { header: "Nombre 2", key: "nombre_completo_2" },
+      { header: "DNI 2", key: "dni_2" },
+      { header: "Inicio", key: "fecha_inicio" },
+      { header: "Fin", key: "fecha_fin" },
+      { header: "Tipo", key: "tipo_membresia" },
+      { header: "Boleta", key: "numero_boleta" },
+      { header: "Pago", key: "metodo_pago" },
+    ];
+
+    filas.forEach((m) => {
+      worksheet.addRow(m);
+    });
+
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=membresias.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error("❌ Error al generar Excel:", err);
+    res.status(500).send("Error al generar Excel");
+  }
+});
+
 module.exports = router;
