@@ -99,4 +99,36 @@ router.get("/asistencias/actual", async (req, res) => {
   }
 });
 
+router.get('/asistencias/hoy', async (req, res) => {
+  const hoy = new Date().toISOString().slice(0, 10);
+
+  const query = `
+    SELECT a.dni, c.nombre_completo, a.hora, c.fecha_vencimiento
+    FROM asistencias a
+    JOIN clientes c ON a.dni = c.dni
+    WHERE a.fecha = ?
+    ORDER BY a.hora DESC
+  `;
+
+  try {
+    const [resultados] = await pool.query(query, [hoy]);
+
+    const asistencias = resultados.map(row => {
+      const vencido = new Date(row.fecha_vencimiento) < new Date();
+      return {
+        dni: row.dni,
+        nombre: row.nombre_completo,
+        hora: row.hora,
+        fecha_vencimiento: row.fecha_vencimiento,
+        vencido
+      };
+    });
+
+    res.json(asistencias);
+  } catch (err) {
+    console.error("❌ Error al obtener asistencias actuales:", err);
+    res.status(500).json({ error: "Error al obtener asistencias actuales" });
+  }
+});
+
 module.exports = router;
