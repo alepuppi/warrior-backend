@@ -6,7 +6,7 @@ console.log("▶️ ENV USER:", process.env.DB_USER);
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { pool, registrarAuditoria } = require('./db'); // ✅ pool correcto
+const { pool, registrarAuditoria } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3006;
@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3006;
 // Middleware
 app.use(cors({
   origin: [
-    "https://warrior-frontend.vercel.app", // ✅ Tu frontend real en producción
-    "http://localhost:5173"                // ✅ Para pruebas locales
+    "https://warrior-frontend.vercel.app", // Producción
+    "http://localhost:5173"                // Desarrollo local
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -33,7 +33,7 @@ const authRoutes = require('./routes/auth');
 
 // Usar rutas
 app.use('/api/membresias', membresiasRouter);
-app.use('/', asistenciasRoutes);
+app.use('/', asistenciasRoutes); // Aquí ya se define /asistencias/registrar
 app.use('/api', renovacionesRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/clientes', clientesRoutes);
@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
   res.send('Servidor de warrior funcionando correctamente');
 });
 
-// ✅ CORREGIDO: eliminar tokens expirados con async/await
+// Limpieza de tokens expirados
 const eliminarTokensExpirados = async () => {
   try {
     const ahora = new Date();
@@ -57,41 +57,9 @@ const eliminarTokensExpirados = async () => {
     console.error('Error al eliminar tokens expirados:', err);
   }
 };
-
 setInterval(eliminarTokensExpirados, 60 * 60 * 1000);
 
-// Endpoint asistencia
-app.post('/asistencias/registrar', async (req, res) => {
-  const { dni } = req.body;
-  if (!dni || typeof dni !== 'string' || dni.trim() === "") {
-    return res.status(400).json({ error: "DNI inválido o vacío" });
-  }
-
-  try {
-    const [clienteResult] = await pool.query("SELECT * FROM clientes WHERE dni = ?", [dni]);
-    if (clienteResult.length === 0) return res.status(404).json({ error: "Cliente no encontrado" });
-
-    const cliente = clienteResult[0];
-    const hoy = new Date();
-    const fecha = hoy.toISOString().slice(0, 10);
-    const hora = hoy.toTimeString().slice(0, 8);
-
-    await pool.query("INSERT INTO asistencias (dni, fecha, hora) VALUES (?, ?, ?)", [dni, fecha, hora]);
-
-    res.json({
-      nombre: cliente.nombre_completo,
-      dni: cliente.dni,
-      fecha_matricula: cliente.fecha_matricula,
-      fecha_vencimiento: cliente.fecha_vencimiento,
-      vencido: new Date(cliente.fecha_vencimiento) < hoy
-    });
-  } catch (error) {
-    console.error("Error al registrar asistencia:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Middleware de errores
+// Manejo de errores
 app.use((err, req, res, next) => {
   console.error('Error en el servidor:', err);
   res.status(500).json({ error: 'Error interno del servidor' });
