@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 3006;
 
 // Middleware
 app.use(cors({
-  origin: "*", // 🔓 Para desarrollo y pruebas; más adelante se puede restringir
+  origin: [
+    "https://warrior-frontend.vercel.app", // ✅ Tu frontend real en producción
+    "http://localhost:5173"                // ✅ Para pruebas locales
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));

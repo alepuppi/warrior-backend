@@ -15,7 +15,11 @@ const AsistenciasActualModal = ({ cerrar }) => {
       }
     };
 
-    obtenerAsistencias();
+    obtenerAsistencias(); // Llamada inicial
+
+    const interval = setInterval(obtenerAsistencias, 10000); // Auto-actualiza cada 10 segundos
+
+    return () => clearInterval(interval); // Limpia el intervalo al cerrar
   }, []);
 
   return (
@@ -23,6 +27,7 @@ const AsistenciasActualModal = ({ cerrar }) => {
       <div className="modal-content">
         <h2>Asistencias del Día</h2>
         <button className="cerrar-btn" onClick={cerrar}>Cerrar</button>
+
         {asistencias.length === 0 ? (
           <p>No hay asistencias registradas hoy.</p>
         ) : (
@@ -32,6 +37,7 @@ const AsistenciasActualModal = ({ cerrar }) => {
                 <th>Nombre</th>
                 <th>DNI</th>
                 <th>Hora</th>
+                <th>Estado</th> {/* ✅ Nuevo */}
               </tr>
             </thead>
             <tbody>
@@ -40,6 +46,9 @@ const AsistenciasActualModal = ({ cerrar }) => {
                   <td>{asistencia.nombre}</td>
                   <td>{asistencia.dni}</td>
                   <td>{asistencia.hora}</td>
+                  <td style={{ color: asistencia.vencido ? "red" : "green", fontWeight: "bold" }}>
+                    {asistencia.vencido ? "VENCIDO" : "ACTIVO"}
+                  </td>
                 </tr>
               ))}
             </tbody>
