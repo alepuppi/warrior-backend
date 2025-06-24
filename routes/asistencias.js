@@ -4,7 +4,7 @@ const { Parser } = require("json2csv");
 const pool = require("../db"); // ✅ Usa el pool configurado con variables de entorno
 
 // 📍 Ruta para registrar asistencia desde el huellero
-router.post("/api/asistencias", async (req, res) => {
+router.post("/asistencias/registrar", async (req, res) => {
   const { dni, fecha, hora } = req.body;
 
   try {

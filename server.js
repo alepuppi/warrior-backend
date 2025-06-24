@@ -33,7 +33,7 @@ const authRoutes = require('./routes/auth');
 
 // Usar rutas
 app.use('/api/membresias', membresiasRouter);
-app.use('/api', asistenciasRoutes);
+app.use('/', asistenciasRoutes);
 app.use('/api', renovacionesRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/clientes', clientesRoutes);
