@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Parser } = require("json2csv");
-const pool = require("../db"); // ✅ Usa el pool configurado con variables de entorno
+const { pool } = require("../db"); // ✅ Usa el pool configurado con variables de entorno
 
 // 📍 Ruta para registrar asistencia desde el huellero
 router.post("/asistencias/registrar", async (req, res) => {
