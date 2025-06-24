@@ -61,7 +61,10 @@ if (process.env.NODE_ENV !== "production") {
   // Endpoint asistencia
   app.post('/asistencias/registrar', async (req, res) => {
     const { dni } = req.body;
-    if (!dni) return res.status(400).json({ error: "DNI es requerido" });
+   if (!dni || typeof dni !== 'string' || dni.trim() === "") {
+   return res.status(400).json({ error: "DNI inválido o vacío" });
+   }
+
   
     try {
       const [clienteResult] = await db.query("SELECT * FROM clientes WHERE dni = ?", [dni]);
@@ -83,7 +86,7 @@ if (process.env.NODE_ENV !== "production") {
       });
     } catch (error) {
       console.error("Error al registrar asistencia:", error);
-      res.status(500).json({ error: "Error del servidor" });
+      res.status(500).json({ error: error.message });
     }
   });
   
