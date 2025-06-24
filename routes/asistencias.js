@@ -3,6 +3,22 @@ const router = express.Router();
 const { Parser } = require("json2csv");
 const pool = require("../db"); // ✅ Usa el pool configurado con variables de entorno
 
+// 📍 Ruta para registrar asistencia desde el huellero
+router.post("/api/asistencias", async (req, res) => {
+  const { dni, fecha, hora } = req.body;
+
+  try {
+    await pool.query(
+      "INSERT INTO asistencias (dni, fecha, hora) VALUES (?, ?, ?)",
+      [dni, fecha, hora]
+    );
+    res.status(200).json({ mensaje: "✅ Asistencia registrada correctamente" });
+  } catch (err) {
+    console.error("❌ Error al registrar asistencia:", err);
+    res.status(500).json({ mensaje: "Error al registrar asistencia" });
+  }
+});
+
 router.get("/asistencias/reporte/:mes", async (req, res) => {
   const mes = req.params.mes;
   const anio = new Date().getFullYear();
