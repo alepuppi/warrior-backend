@@ -5,6 +5,7 @@ const pool = require("../db"); // ✅ Usa el pool configurado con variables de e
 
 // 📍 Ruta para registrar asistencia desde el huellero
 router.post("/asistencias/registrar", async (req, res) => {
+   console.log("📥 DNI recibido:", dni); // ✅ Agrega esto
   const { dni, fecha, hora } = req.body;
 
   try {
