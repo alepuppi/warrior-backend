@@ -5,20 +5,38 @@ const pool = require("../db"); // ✅ Usa el pool configurado con variables de e
 
 // 📍 Ruta para registrar asistencia desde el huellero
 router.post("/asistencias/registrar", async (req, res) => {
-   console.log("📥 DNI recibido:", dni); // ✅ Agrega esto
-  const { dni, fecha, hora } = req.body;
+  const { dni } = req.body;
+
+  console.log("📥 DNI recibido:", dni); // ✅ Ahora sí, ya está definido
+
+  if (!dni || typeof dni !== 'string' || dni.trim() === "") {
+    return res.status(400).json({ error: "DNI inválido o vacío" });
+  }
 
   try {
-    await pool.query(
-      "INSERT INTO asistencias (dni, fecha, hora) VALUES (?, ?, ?)",
-      [dni, fecha, hora]
-    );
-    res.status(200).json({ mensaje: "✅ Asistencia registrada correctamente" });
-  } catch (err) {
-    console.error("❌ Error al registrar asistencia:", err);
-    res.status(500).json({ mensaje: "Error al registrar asistencia" });
+    const [clienteResult] = await pool.query("SELECT * FROM clientes WHERE dni = ?", [dni]);
+    if (clienteResult.length === 0) return res.status(404).json({ error: "Cliente no encontrado" });
+
+    const cliente = clienteResult[0];
+    const hoy = new Date();
+    const fecha = hoy.toISOString().slice(0, 10);
+    const hora = hoy.toTimeString().slice(0, 8);
+
+    await pool.query("INSERT INTO asistencias (dni, fecha, hora) VALUES (?, ?, ?)", [dni, fecha, hora]);
+
+    res.json({
+      nombre: cliente.nombre_completo,
+      dni: cliente.dni,
+      fecha_matricula: cliente.fecha_matricula,
+      fecha_vencimiento: cliente.fecha_vencimiento,
+      vencido: new Date(cliente.fecha_vencimiento) < hoy
+    });
+  } catch (error) {
+    console.error("❌ Error al registrar asistencia:", error);
+    res.status(500).json({ error: error.message });
   }
 });
+
 
 router.get("/asistencias/reporte/:mes", async (req, res) => {
   const mes = req.params.mes;
