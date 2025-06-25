@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Parser } = require("json2csv");
-const { pool } = require("../db"); // ✅ Usa el pool configurado con variables de entorno
+const { pool } = require("../db");
 
 // 📍 Ruta para registrar asistencia desde el huellero
 router.post("/asistencias/registrar", async (req, res) => {
@@ -27,13 +27,23 @@ router.post("/asistencias/registrar", async (req, res) => {
 
     await pool.query("INSERT INTO asistencias (dni, fecha, hora) VALUES (?, ?, ?)", [dni, fecha, hora]);
 
-    res.json({
+    const asistenciaData = {
       nombre: cliente.nombre_completo,
       dni: cliente.dni,
       fecha_matricula: cliente.fecha_matricula,
       fecha_vencimiento: cliente.fecha_vencimiento,
-      vencido: new Date(cliente.fecha_vencimiento) < hoy
-    });
+      vencido: new Date(cliente.fecha_vencimiento) < hoy,
+      hora
+    };
+
+    // ✅ Emitir evento vía socket.io
+    const io = req.app.get("io");
+    if (io) {
+      io.emit("asistencia-registrada", asistenciaData);
+      console.log("📡 Emitido evento asistencia-registrada", asistenciaData);
+    }
+
+    res.json(asistenciaData);
   } catch (error) {
     console.error("❌ Error al registrar asistencia:", error);
     res.status(500).json({ error: error.message });
@@ -68,7 +78,6 @@ router.get("/asistencias/reporte/:mes", async (req, res) => {
   }
 });
 
-// 📍 Obtener asistencias del día actual con estado de membresía
 router.get("/asistencias/actual", async (req, res) => {
   const hoy = new Date().toISOString().slice(0, 10);
 
