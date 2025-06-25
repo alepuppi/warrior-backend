@@ -7,7 +7,7 @@ const { pool } = require("../db"); // ✅ Usa el pool configurado con variables 
 router.post("/asistencias/registrar", async (req, res) => {
   const { dni } = req.body;
 
-  console.log("📥 DNI recibido:", dni); // ✅ Ahora sí, ya está definido
+  console.log("📥 DNI recibido:", dni);
 
   if (!dni || typeof dni !== 'string' || dni.trim() === "") {
     return res.status(400).json({ error: "DNI inválido o vacío" });
@@ -18,7 +18,10 @@ router.post("/asistencias/registrar", async (req, res) => {
     if (clienteResult.length === 0) return res.status(404).json({ error: "Cliente no encontrado" });
 
     const cliente = clienteResult[0];
+
+    // ✅ Ajuste de hora a Lima (UTC-5)
     const hoy = new Date();
+    hoy.setHours(hoy.getHours() - 5);
     const fecha = hoy.toISOString().slice(0, 10);
     const hora = hoy.toTimeString().slice(0, 8);
 
@@ -36,7 +39,6 @@ router.post("/asistencias/registrar", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 router.get("/asistencias/reporte/:mes", async (req, res) => {
   const mes = req.params.mes;
