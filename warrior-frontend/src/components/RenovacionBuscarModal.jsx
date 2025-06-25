@@ -11,7 +11,7 @@ const RenovacionBuscarModal = ({ cerrar }) => {
     if (!dni) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/renovacion/${dni}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/clientes/${dni}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -52,16 +52,17 @@ const RenovacionBuscarModal = ({ cerrar }) => {
         {mensaje && <p className="mensaje">{mensaje}</p>}
 
         {cliente && (
-          <div className="cliente-info">
-            <p><strong>Nombre:</strong> {cliente.nombre}</p>
-            <p><strong>DNI:</strong> {cliente.dni}</p>
-            <p><strong>Fecha de matrícula:</strong> {new Date(cliente.fecha_inicio).toLocaleDateString()}</p>
-            <p><strong>Fecha de vencimiento:</strong> {new Date(cliente.fecha_fin).toLocaleDateString()}</p>
-            {calcularVencimiento(cliente.fecha_fin) && (
-              <p className="alerta">⚠ La membresía está vencida</p>
-            )}
-          </div>
-        )}
+    <div className="cliente-info">
+    <p><strong>Nombre:</strong> {cliente.nombre}</p>
+    <p><strong>DNI:</strong> {cliente.dni}</p>
+    <p><strong>Fecha de matrícula:</strong> {new Date(cliente.fecha_matricula).toLocaleDateString()}</p>
+    <p><strong>Fecha de vencimiento:</strong> {new Date(cliente.fecha_vencimiento).toLocaleDateString()}</p>
+    {calcularVencimiento(cliente.fecha_vencimiento) && (
+      <p className="alerta">⚠ La membresía está vencida</p>
+     )}
+     </div>
+     )}
+
 
         <div className="modal-buttons">
           <button className="cancel" onClick={cerrar}>Cerrar</button>
