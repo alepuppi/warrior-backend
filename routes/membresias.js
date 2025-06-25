@@ -5,6 +5,15 @@ const moment = require('moment');
 const PDFDocument = require('pdfkit');
 const ExcelJS = require('exceljs');
 
+// ... (todo igual hasta dentro de cada ruta)
+
+const actualizarCliente = async (dni, fecha_inicio, fecha_fin) => {
+  await pool.query(
+    "UPDATE clientes SET fecha_matricula = ?, fecha_vencimiento = ? WHERE dni = ?",
+    [fecha_inicio, fecha_fin, dni]
+  );
+};
+
 // 📌 Ruta para registrar membresía mensual
 router.post('/mensual', async (req, res) => {
   const { nombre_completo, dni, fecha_inicio, metodo_pago, numero_boleta } = req.body;
@@ -15,14 +24,14 @@ router.post('/mensual', async (req, res) => {
 
   try {
     const fecha_fin = moment(fecha_inicio).add(1, 'months').format('YYYY-MM-DD');
-    const sql = `
-      INSERT INTO membresias (
-        nombre_completo_1, dni_1, fecha_inicio, fecha_fin, metodo_pago, numero_boleta, tipo_membresia
-      ) VALUES (?, ?, ?, ?, ?, ?, 'Mensual')
-    `;
+    const sql = `INSERT INTO membresias (
+      nombre_completo_1, dni_1, fecha_inicio, fecha_fin, metodo_pago, numero_boleta, tipo_membresia
+    ) VALUES (?, ?, ?, ?, ?, ?, 'Mensual')`;
+
     const valores = [nombre_completo, dni, fecha_inicio, fecha_fin, metodo_pago, numero_boleta];
     const [result] = await pool.query(sql, valores);
 
+    await actualizarCliente(dni, fecha_inicio, fecha_fin);
     await registrarAuditoria('warrior', 'Registro', `Registró membresía Mensual (${dni})`);
 
     return res.status(200).json({ message: 'Membresía mensual registrada', id: result.insertId });
@@ -67,8 +76,13 @@ router.post('/duo', async (req, res) => {
     ];
     const [result] = await pool.query(sql, valores);
 
-    await registrarAuditoria('warrior', 'Registro', `Registró membresía Duo (${dni1} y ${dni2})`);
+    // ✅ Actualizar ambos clientes (o solo uno si es duo para una sola persona)
+    await actualizarCliente(dni1, fechaInicio, fechaFin);
+    if (dni1 !== dni2) {
+      await actualizarCliente(dni2, fechaInicio, fechaFin);
+    }
 
+    await registrarAuditoria('warrior', 'Registro', `Registró membresía Duo (${dni1} y ${dni2})`);
     return res.status(200).json({ message: 'Membresía Duo registrada', id: result.insertId });
   } catch (error) {
     console.error("❌ Error al registrar membresía Duo:", error);
@@ -103,6 +117,7 @@ router.post('/trimestral', async (req, res) => {
     const valores = [nombre, dni, fechaInicio, fechaFin, metodoPago, numeroBoleta];
     const [result] = await pool.query(sql, valores);
 
+    await actualizarCliente(dni, fechaInicio, fechaFin);
     await registrarAuditoria('warrior', 'Registro', `Registró membresía Trimestral (${dni})`);
 
     return res.status(200).json({ message: 'Membresía Trimestral registrada', id: result.insertId });
